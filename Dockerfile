@@ -1,4 +1,4 @@
-FROM node:16.0.0-slim
+FROM node:16.10.0-slim
 
 # user container
 USER node
