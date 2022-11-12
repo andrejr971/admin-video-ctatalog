@@ -1,6 +1,7 @@
 import { omit } from 'lodash';
+import { validate as uuidValidate } from 'uuid';
 
-import { Category } from './category';
+import { Category, CategoryProps } from './category';
 
 describe('Category unit test', () => {
   test('construct of category ', () => {
@@ -61,5 +62,115 @@ describe('Category unit test', () => {
       name: 'Movie',
       created_at,
     });
+  });
+
+  test('id shield', () => {
+    type CategoryData = {
+      props: CategoryProps;
+      id?: string;
+    };
+
+    const data: CategoryData[] = [
+      {
+        props: {
+          name: 'movie',
+        },
+      },
+      {
+        props: {
+          name: 'movie',
+        },
+        id: null,
+      },
+      {
+        props: {
+          name: 'movie',
+        },
+        id: undefined,
+      },
+      {
+        props: {
+          name: 'movie',
+        },
+        id: '51a8afaf-4e6e-4ee1-9fe7-b79f52c2220a',
+      },
+    ];
+
+    data.forEach((index) => {
+      let category = new Category(index.props, index.id);
+      expect(category.id).not.toBeNull();
+      expect(uuidValidate(category.id)).toBeTruthy();
+    });
+  });
+
+  test('getter of name props', () => {
+    const category = new Category({
+      name: 'movie',
+    });
+    expect(category.name).toBe('movie');
+  });
+
+  test('getter and setter of description props', () => {
+    let category = new Category({
+      name: 'movie',
+    });
+    expect(category.name).toBe('movie');
+    expect(category.description).toBeNull();
+
+    category = new Category({
+      name: 'movie',
+      description: 'some description',
+    });
+    expect(category.description).toBe('some description');
+
+    category = new Category({
+      name: 'movie',
+    });
+    category['description'] = 'other description';
+    expect(category.description).toBe('other description');
+
+    category['description'] = undefined;
+    expect(category.description).toBeNull();
+  });
+
+  test('getter and setter of is_active props', () => {
+    let category = new Category({
+      name: 'movie',
+    });
+    expect(category.name).toBe('movie');
+    expect(category.is_active).toBeTruthy();
+
+    category = new Category({
+      name: 'movie',
+      is_active: false,
+    });
+    expect(category.is_active).toBeFalsy();
+
+    category = new Category({
+      name: 'movie',
+    });
+    category['is_active'] = false;
+    expect(category.is_active).toBeFalsy();
+
+    category = new Category({
+      name: 'movie',
+    });
+    category['is_active'] = undefined;
+    expect(category.is_active).toBeTruthy();
+  });
+
+  test('getter of created_at props', () => {
+    let category = new Category({
+      name: 'movie',
+    });
+    expect(category.created_at).toBeInstanceOf(Date);
+
+    const created_at = new Date();
+
+    category = new Category({
+      name: 'movie',
+      created_at,
+    });
+    expect(category.created_at).toBe(created_at);
   });
 });
