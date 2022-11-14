@@ -9,8 +9,8 @@
     "clean:tsc": "rm tsconfig.tsbuildinfo",
     "lint": "eslint . --ext src/**/*.ts",
     "format": "eslint src/**/*.ts --fix",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "jest src/**/tests/",
+    "test:watch": "jest src/**/tests/ --watch"
   },
   "repository": {
     "type": "git",
