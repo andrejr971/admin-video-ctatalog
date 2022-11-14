@@ -1,7 +1,8 @@
 FROM node:16.10.0-slim
 
 RUN apt update && apt install -y --no-install-recommends \
-  git
+  git \
+  ca-certificates
 
 # user container
 USER node
