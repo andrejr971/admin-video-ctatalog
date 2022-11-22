@@ -17,8 +17,6 @@ describe('Value object unit test', () => {
     const date = new Date();
 
     let arrange = [
-      { received: null, expected: 'null' },
-      { received: undefined, expected: 'undefined' },
       { received: '', expected: '' },
       { received: 'fake test', expected: 'fake test' },
       { received: 0, expected: '0' },
@@ -37,5 +35,18 @@ describe('Value object unit test', () => {
       const vo = new StubValueObject(value.received);
       expect(`${vo}`).toBe(value.expected);
     });
+  });
+
+  it('immutable', () => {
+    const vo = new StubValueObject({
+      prop1: 'value',
+      nested: { prop2: new Date() },
+    });
+    expect(typeof vo).toBe('object');
+    expect(() => {
+      vo['_value'].nested.prop2 = 'mudou';
+    }).toThrow(
+      "Cannot assign to read only property 'prop2' of object '#<Object>'",
+    );
   });
 });
